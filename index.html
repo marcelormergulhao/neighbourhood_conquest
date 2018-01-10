@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="css/style.css"/>
+  <title>Neighbourhood Conquest</title>
+</head>
+<body>
+  <div class="container">
+    <header class="title">Neighbourhood Conquest</header>
+    <aside class="menu">
+      <ul id="restaurant-list" data-bind="foreach: restaurants">
+        <li data-bind="text: name"></li>
+      </ul>
+    </aside>
+    <article id="map"></article>
+  </div>
+
+  <script type="text/javascript" src="js/knockout-3.4.2.js"></script>
+  <script src="js/mvvc.js"></script>
+  <script async defer
+      src="https://maps.googleapis.com/maps/api/js?libraries=places,drawing,geometry&key=AIzaSyAHgSgLY3pp9VWqCFF8ac5-VRpQwkQnM2A&v=3&callback=initMap">
+  </script>
+</body>
+</html>
