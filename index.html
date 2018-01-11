@@ -11,9 +11,9 @@
   <div class="container">
     <header class="title">Neighbourhood Conquest</header>
     <aside class="menu">
-      <ul id="restaurant-list" data-bind="foreach: restaurants">
-        <li data-bind="text: name"></li>
-      </ul>
+      <div id="places-list" data-bind="foreach: places">
+        <p class="place-item" data-bind="text: name, css: {selected: $data == $root.currentPlace() }, click: $parent.selectPlace"></p>
+      </div>
     </aside>
     <article id="map"></article>
   </div>

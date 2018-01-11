@@ -32,7 +32,13 @@
   background-color: #004d40;
 }
 
-/* List items will have color: #39796b */
+.place-item{
+  padding-left: 10px;
+}
+
+.selected{
+  background-color: #39796b;
+}
 
 #map{
     grid-area: a;
