@@ -1,11 +1,12 @@
 //Google Maps API Scope
-var map;
 function initMap(){
-  map = new google.maps.Map(document.getElementById("map"), {
+  vm.map = new google.maps.Map(document.getElementById("map"), {
       center: {lat: -22.852477, lng: -47.053922},
       zoom: 15,
       mapTypeControl: false
   });
+
+  vm.createMarkers();
 }
 
 //Knockout Framework Scope
@@ -45,6 +46,21 @@ var ViewModel = function() {
     self.currentPlace(place);
   };
 
+  //Create Map markers for each of the places
+  self.createMarkers = function(){
+    for(var i=0; i< self.places().length;i++){
+      var marker = new google.maps.Marker({
+          position: self.places()[i].location,
+          title: self.places()[i].name,
+          animation: google.maps.Animation.DROP,
+          id: i
+      });
+      marker.setMap(self.map);
+      self.markers.push(marker);
+    };
+  };
+
+  self.markers = [];
 };
 
 //Save Viewmodel in variable to use data outside ViewModel
