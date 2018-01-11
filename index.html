@@ -11,7 +11,8 @@
   <div class="container">
     <header class="title">Neighbourhood Conquest</header>
     <aside class="menu">
-      <div id="places-list" data-bind="foreach: places">
+      <input type="text" data-bind="value: filter" placeholder="Filter Places"/>
+      <div id="places-list" data-bind="foreach: filteredPlaces">
         <p class="place-item" data-bind="text: name, css: {selected: $data == $root.currentPlace() }, click: $parent.selectPlace"></p>
       </div>
     </aside>

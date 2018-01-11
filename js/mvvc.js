@@ -60,6 +60,19 @@ var ViewModel = function() {
     };
   };
 
+  self.filter = ko.observable();
+
+  self.filteredPlaces = ko.computed(function(){
+    var filter = self.filter();
+    if(!filter){
+      return self.places();
+    } else {
+      return ko.utils.arrayFilter(self.places(), function(place){
+        return (place.name.toLowerCase().indexOf(filter.toLowerCase()) != -1);
+      });
+    }
+  });
+
   self.markers = [];
 };
 

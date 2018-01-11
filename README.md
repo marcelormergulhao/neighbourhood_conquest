@@ -19,3 +19,7 @@ This project uses the following:
 
 * [Knockout library](http://knockoutjs.com/index.html)
 * [Google Maps API](https://developers.google.com/maps/)
+
+## Tips and help
+
+As a very nice overview of Knockout features with examples, check [this site](http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html).
