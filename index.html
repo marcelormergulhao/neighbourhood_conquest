@@ -11,7 +11,9 @@
   <div class="container">
     <header class="title">Neighbourhood Conquest</header>
     <aside class="menu">
-      <input type="text" data-bind="value: filter" placeholder="Filter Places"/>
+      <form data-bind="submit: mapRefresh">
+        <input type="text" data-bind="value: filter" placeholder="Filter Places"/>
+      </form>
       <div id="places-list" data-bind="foreach: filteredPlaces">
         <p class="place-item" data-bind="text: name, css: {selected: $data == $root.currentPlace() }, click: $parent.selectPlace"></p>
       </div>

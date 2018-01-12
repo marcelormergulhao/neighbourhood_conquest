@@ -9,6 +9,23 @@ function initMap(){
   vm.createMarkers();
 }
 
+function refreshMarkers(){
+  for(var i=0; i< vm.markers.length; i++){
+    //Remove marker, but insert again if the item is on list
+    vm.markers[i].setMap(null);
+    var markerLocation = vm.markers[i].getPosition();
+    var places = vm.filteredPlaces();
+    var j;
+    for(j=0; j < places.length; j++){
+      var placeLocation = new google.maps.LatLng(places[j].location);
+      if(placeLocation.equals(markerLocation)){
+        vm.markers[i].setMap(vm.map);
+        break;
+      }
+    }
+  }
+}
+
 //Knockout Framework Scope
 //Model Object
 var Place = function(name, location, category, subcategory){
@@ -72,6 +89,11 @@ var ViewModel = function() {
       });
     }
   });
+
+  //Refresh map if user updates the input field 
+  self.mapRefresh = function(){
+    refreshMarkers();
+  }
 
   self.markers = [];
 };
