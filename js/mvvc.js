@@ -2,7 +2,7 @@
 function initMap(){
   vm.map = new google.maps.Map(document.getElementById("map"), {
       center: {lat: -22.852477, lng: -47.053922},
-      zoom: 15,
+      zoom: 16,
       mapTypeControl: false
   });
 
@@ -61,15 +61,31 @@ var ViewModel = function() {
   self.selectPlace = function(place){
     //Set new current place to highlight in UI
     self.currentPlace(place);
+    var placeLoc = new google.maps.LatLng(place.location);
+    for(var i=0; i < self.markers.length; i++){
+      var marker=self.markers[i];
+      if(placeLoc.equals(marker.position)){
+        marker.setIcon(self.markerHighlight);
+      } else{
+        marker.setIcon(self.markerSimple);
+      }
+
+    }
   };
 
   //Create Map markers for each of the places
   self.createMarkers = function(){
+    //Create simple and highlighted marker icons
+    var iconBase = 'https://maps.google.com/mapfiles/kml/paddle/';
+    self.markerSimple = iconBase + 'red-square.png';
+    self.markerHighlight = iconBase + 'blu-square.png';
+
     for(var i=0; i< self.places().length;i++){
       var marker = new google.maps.Marker({
           position: self.places()[i].location,
           title: self.places()[i].name,
           animation: google.maps.Animation.DROP,
+          icon: self.markerSimple,
           id: i
       });
       marker.setMap(self.map);
