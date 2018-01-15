@@ -26,6 +26,25 @@ function refreshMarkers(){
   }
 }
 
+function openInfoWindow(marker){
+  // Check to make sure the infowindow is not already opened on this marker.
+  if (vm.infoWindow.marker != marker) {
+    // Set infoWindow content to the name of this place
+    vm.infoWindow.setContent(vm.getPlaceName(marker.id));
+    vm.infoWindow.marker = marker;
+    // Make sure the marker property is cleared if the infowindow is closed.
+    vm.infoWindow.addListener('closeclick', function() {
+    vm.infoWindow.marker = null;
+    });
+
+    //Open infowindow on specified marker
+    vm.infoWindow.open(map, marker);
+
+    //To be consistent, select marker as current
+    vm.selectPlaceByIndex(marker.id);
+  }
+}
+
 //Knockout Framework Scope
 //Model Object
 var Place = function(name, location, category, subcategory){
@@ -66,12 +85,27 @@ var ViewModel = function() {
       var marker=self.markers[i];
       if(placeLoc.equals(marker.position)){
         marker.setIcon(self.markerHighlight);
+        //Make sure the infoWindow is from this marker, otherwise close it
+        if(self.infoWindow.marker != marker){
+          self.infoWindow.close();
+        }
       } else{
         marker.setIcon(self.markerSimple);
       }
-
     }
   };
+
+  self.selectPlaceByIndex = function(placeIndex){
+    if(placeIndex < self.places().length){
+      self.selectPlace(self.places()[placeIndex]);
+    }
+  };
+
+  self.getPlaceName = function(placeIndex){
+    if(placeIndex < self.places().length){
+      return self.places()[placeIndex].name;
+    }
+  }
 
   //Create Map markers for each of the places
   self.createMarkers = function(){
@@ -79,6 +113,9 @@ var ViewModel = function() {
     var iconBase = 'https://maps.google.com/mapfiles/kml/paddle/';
     self.markerSimple = iconBase + 'red-square.png';
     self.markerHighlight = iconBase + 'blu-square.png';
+
+    //Create infowindow to show aditional information
+    self.infoWindow = new google.maps.InfoWindow();
 
     for(var i=0; i< self.places().length;i++){
       var marker = new google.maps.Marker({
@@ -88,6 +125,11 @@ var ViewModel = function() {
           icon: self.markerSimple,
           id: i
       });
+
+      marker.addListener('click', function(){
+        openInfoWindow(this);
+      })
+
       marker.setMap(self.map);
       self.markers.push(marker);
     };
@@ -106,7 +148,7 @@ var ViewModel = function() {
     }
   });
 
-  //Refresh map if user updates the input field 
+  //Refresh map if user updates the input field
   self.mapRefresh = function(){
     refreshMarkers();
   }
