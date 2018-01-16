@@ -29,8 +29,10 @@ function refreshMarkers(){
 function openInfoWindow(marker){
   // Check to make sure the infowindow is not already opened on this marker.
   if (vm.infoWindow.marker != marker) {
-    // Set infoWindow content to the name of this place
-    vm.infoWindow.setContent(vm.getPlaceName(marker.id));
+    // Erase infowindow content to enable refresh
+    vm.infoWindow.setContent("");
+    //Get data from API and populate infoWindow
+    getFoursquareData(vm.infoWindow, marker);
     vm.infoWindow.marker = marker;
     // Make sure the marker property is cleared if the infowindow is closed.
     vm.infoWindow.addListener('closeclick', function() {
@@ -43,6 +45,56 @@ function openInfoWindow(marker){
     //To be consistent, select marker as current
     vm.selectPlaceByIndex(marker.id);
   }
+}
+
+function formatInfoContent(name, phone, url, addr, tips){
+    var infoStr =  "<strong>"+name+"</strong><br/>";
+    infoStr +=  "<strong>Phone: </strong><span>"+phone+"</span><br/>";
+    infoStr += "<strong>Website: </strong><a href=\""+url+"\">"+url+"</a><br/>";
+    infoStr += "<strong>Address: </strong><span>"+addr+"</span><br/>";
+
+    infoStr += "<strong>Tips: </strong><br/>";
+    //Print at most 2 tips
+    for(var i=0;i<2;i++){
+      if(i < tips.length){
+        var tip = tips[i];
+        infoStr += "<span><i>"+tip.user.firstName+" "+tip.user.lastName+":</i>a "+tip.text+"</span><br/>";
+      }
+    }
+
+    return infoStr;
+};
+
+//Foursquare API query
+function getFoursquareData(infoWindow, marker){
+  var clientId = "L20B1I3GGCF32LJ1RWJTINX5ORTS0LISVDRPZ11PREHLVNVI";
+  var clientSecret = "PL0MGGDF1PXFVWB2SZMKKIAZMPVA1MBY4AG40F1VCXX1FWQ5";
+  var latLng = marker.getPosition();
+  var llStr = latLng.lat()+","+latLng.lng();
+  var apiVersion = "20180115";
+  var url = "https://api.foursquare.com/v2/venues/explore?ll="+
+            llStr+"&v="+apiVersion+"&client_id="+clientId+"&client_secret="+
+            clientSecret+"&limit=1&venuePhotos=1";
+
+  fetch(url).then(function(response) {
+    if(response.ok){
+      return response.json();
+    } else{
+      console.log("RESPONSE NOT OK");
+    }
+  }).then(function(data) {
+    //From query results get the place name, telephone, website and first 2 tips
+    var content = formatInfoContent(data.response.groups[0].items[0].venue.name,
+                                    data.response.groups[0].items[0].venue.contact.formattedPhone,
+                                    data.response.groups[0].items[0].venue.url,
+                                    data.response.groups[0].items[0].venue.location.formattedAddress,
+                                    data.response.groups[0].items[0].tips);
+    infoWindow.setContent(content);
+  }).catch(function() {
+    console.log("Error on foursquare API fetch");
+    infoWindow.setContent("<strong>"+vm.getPlaceName(marker.id)+
+                          "</strong><br/><p>No info for this place</p>");
+  });
 }
 
 //Knockout Framework Scope

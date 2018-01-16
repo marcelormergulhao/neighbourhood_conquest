@@ -19,7 +19,10 @@ This project uses the following:
 
 * [Knockout library](http://knockoutjs.com/index.html)
 * [Google Maps API](https://developers.google.com/maps/)
+* [Foursquare Places API](https://developer.foursquare.com)
 
 ## Tips and help
 
 As a very nice overview of Knockout features with examples, check [this site](http://www.knockmeout.net/2011/04/utility-functions-in-knockoutjs.html).
+An overview of "fetch" and many other interesting browser features and standards
+is present in [Mozilla Developer Docs](https://developer.mozilla.org).
