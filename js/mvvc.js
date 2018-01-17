@@ -36,7 +36,7 @@ function openInfoWindow(marker){
     vm.infoWindow.marker = marker;
     // Make sure the marker property is cleared if the infowindow is closed.
     vm.infoWindow.addListener('closeclick', function() {
-    vm.infoWindow.marker = null;
+      vm.infoWindow.marker = null;
     });
 
     //Open infowindow on specified marker
@@ -61,7 +61,7 @@ function formatInfoContent(name, phone, url, addr){
       infoStr += "<strong>Address: </strong><span>"+addr+"</span><br/>";
     }
     return infoStr;
-};
+}
 
 function addPhotoToContent(content, photos){
   var infoStr = content + "<strong>Photos:</strong><br/>";
@@ -95,7 +95,6 @@ function getFoursquareData(infoWindow, marker){
                                     data.response.venues[0].contact.formattedPhone,
                                     data.response.venues[0].url,
                                     data.response.venues[0].location.formattedAddress);
-
 
     //Get the place photos
     var placeId = data.response.venues[0].id;
@@ -198,7 +197,7 @@ var ViewModel = function() {
     if(placeIndex < self.places().length){
       return self.places()[placeIndex].name;
     }
-  }
+  };
 
   //Create Map markers for each of the places
   self.createMarkers = function(){
@@ -221,7 +220,7 @@ var ViewModel = function() {
 
       marker.addListener('click', function(){
         openInfoWindow(this);
-      })
+      });
 
       marker.setMap(self.map);
       self.markers.push(marker);
@@ -244,14 +243,14 @@ var ViewModel = function() {
   //Refresh map if user updates the input field
   self.mapRefresh = function(){
     refreshMarkers();
-  }
+  };
 
   self.markers = [];
 
   self.clearFilter = function(){
     self.filter("");
     refreshMarkers();
-  }
+  };
 
   //Observable to control if the menu should be visible or not
   self.showMenu = ko.observable(true);
@@ -271,9 +270,8 @@ var ViewModel = function() {
       } else{
         contentArea.style.gridTemplateAreas='"t t t t t t t t t t""m m m m m m a a a a"';
       }
-
     }
-  }
+  };
 
   //Provide copy of locations
   self.getFilteredLocations = function(){
@@ -283,7 +281,7 @@ var ViewModel = function() {
       locations.push(places[i].location);
     }
     return locations;
-  }
+  };
 };
 
 //Save Viewmodel in variable to use data outside ViewModel
