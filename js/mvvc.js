@@ -48,8 +48,10 @@ function openInfoWindow(marker){
 }
 
 //Format information that the infoBox will receive. Show only the fields with some information
-function formatInfoContent(name, phone, url, addr){
-    var infoStr =  "<strong>"+name+"</strong><br/>";
+function formatInfoContent(name, phone, url, addr, placeId, clientId){
+    var foursquareRef = "https://foursquare.com/v/"+placeId+"?ref="+clientId
+    //Link the name to the Foursquare venue
+    var infoStr =  "<a href=\""+foursquareRef+"\"><strong>"+name+"</strong></a><br/>";
 
     if(phone){
       infoStr +=  "<strong>Phone: </strong><span>"+phone+"</span><br/>";
@@ -94,7 +96,9 @@ function getFoursquareData(infoWindow, marker){
     var content = formatInfoContent(data.response.venues[0].name,
                                     data.response.venues[0].contact.formattedPhone,
                                     data.response.venues[0].url,
-                                    data.response.venues[0].location.formattedAddress);
+                                    data.response.venues[0].location.formattedAddress,
+                                    data.response.venues[0].id,
+                                    clientId);
 
     //Get the place photos
     var placeId = data.response.venues[0].id;
@@ -123,12 +127,8 @@ function getFoursquareData(infoWindow, marker){
 
       if(photoUrl.length > 0 ){
         content = addPhotoToContent(content, photoUrl);
-        infoWindow.setContent(content);
-      } else{
-        //If we don't have photos show the rest of the retrieved information
-        infoWindow.setContent(content);
       }
-
+      infoWindow.setContent(content);
     })
   }).catch(function() {
     alert("Failed to fetch Foursquare data");
