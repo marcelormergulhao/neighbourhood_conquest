@@ -15,7 +15,7 @@
   grid-template-rows: 40px auto;
   grid-template-columns: repeat(10, 1fr);
   grid-template-areas:  "t t t t t t t t t t"
-                        "m a a a a a a a a a";
+                        "m m a a a a a a a a";
   grid-row-gap: 5px:
 }
 
@@ -30,10 +30,36 @@
 .menu{
   grid-area: m;
   background-color: #004d40;
+  text-align: center;
+}
+
+.search-form{
+  width:100%;
+  padding-top: 5px;
+  display: grid;
+  grid-template-rows: 30px;
+  grid-template-columns: repeat(11, 1fr);
+  grid-column-gap: 5px:
+}
+
+#places-list{
+  padding-top: 20px;
 }
 
 .place-item{
   padding-left: 10px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.place-search{
+  width:100%;
+  font-size: 18px;
+  grid-column: 2/9;
+}
+
+.search-clear{
+  grid-column: 10/11;
 }
 
 .selected{

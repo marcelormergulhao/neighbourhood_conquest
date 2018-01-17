@@ -245,6 +245,11 @@ var ViewModel = function() {
   }
 
   self.markers = [];
+
+  self.clearFilter = function(){
+    self.filter("");
+    refreshMarkers();
+  }
 };
 
 //Save Viewmodel in variable to use data outside ViewModel
