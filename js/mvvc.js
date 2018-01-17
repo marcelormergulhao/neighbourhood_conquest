@@ -47,23 +47,28 @@ function openInfoWindow(marker){
   }
 }
 
-function formatInfoContent(name, phone, url, addr, tips){
+function formatInfoContent(name, phone, url, addr){
     var infoStr =  "<strong>"+name+"</strong><br/>";
-    infoStr +=  "<strong>Phone: </strong><span>"+phone+"</span><br/>";
-    infoStr += "<strong>Website: </strong><a href=\""+url+"\">"+url+"</a><br/>";
-    infoStr += "<strong>Address: </strong><span>"+addr+"</span><br/>";
 
-    infoStr += "<strong>Tips: </strong><br/>";
-    //Print at most 2 tips
-    for(var i=0;i<2;i++){
-      if(i < tips.length){
-        var tip = tips[i];
-        infoStr += "<span><i>"+tip.user.firstName+" "+tip.user.lastName+":</i>a "+tip.text+"</span><br/>";
-      }
+    if(phone){
+      infoStr +=  "<strong>Phone: </strong><span>"+phone+"</span><br/>";
     }
-
+    if(url){
+      infoStr += "<strong>Website: </strong><a href=\""+url+"\">"+url+"</a><br/>";
+    }
+    if(addr){
+      infoStr += "<strong>Address: </strong><span>"+addr+"</span><br/>";
+    }
     return infoStr;
 };
+
+function addPhotoToContent(content, photos){
+  var infoStr = content + "<strong>Photos:</strong><br/>";
+  for(var i = 0; i < photos.length; i++){
+    infoStr+="<img src=\""+photos[i]+"\" style=\"padding: 5px;\"/>";
+  }
+  return infoStr;
+}
 
 //Foursquare API query
 function getFoursquareData(infoWindow, marker){
@@ -72,9 +77,10 @@ function getFoursquareData(infoWindow, marker){
   var latLng = marker.getPosition();
   var llStr = latLng.lat()+","+latLng.lng();
   var apiVersion = "20180115";
-  var url = "https://api.foursquare.com/v2/venues/explore?ll="+
+  var placeName = vm.getPlaceName(marker.id);
+  var url = "https://api.foursquare.com/v2/venues/search?ll="+
             llStr+"&v="+apiVersion+"&client_id="+clientId+"&client_secret="+
-            clientSecret+"&limit=1&venuePhotos=1";
+            clientSecret+"&limit=1&query="+placeName;
 
   fetch(url).then(function(response) {
     if(response.ok){
@@ -84,16 +90,50 @@ function getFoursquareData(infoWindow, marker){
     }
   }).then(function(data) {
     //From query results get the place name, telephone, website and first 2 tips
-    var content = formatInfoContent(data.response.groups[0].items[0].venue.name,
-                                    data.response.groups[0].items[0].venue.contact.formattedPhone,
-                                    data.response.groups[0].items[0].venue.url,
-                                    data.response.groups[0].items[0].venue.location.formattedAddress,
-                                    data.response.groups[0].items[0].tips);
-    infoWindow.setContent(content);
+    var content = formatInfoContent(data.response.venues[0].name,
+                                    data.response.venues[0].contact.formattedPhone,
+                                    data.response.venues[0].url,
+                                    data.response.venues[0].location.formattedAddress);
+
+
+    //Get the place photos
+    var placeId = data.response.venues[0].id;
+    var photoRequest = "https://api.foursquare.com/v2/venues/"+placeId+"/photos?v="+
+                        apiVersion+"&client_id="+clientId+"&client_secret="+clientSecret;
+    //Make the second request to Foursquare API
+    fetch(photoRequest).then(function(response){
+      if(response.ok){
+        return response.json();
+      } else{
+        alert("Failed to query photo");
+      }
+    }).then(function(photoData){
+      var photoObj = photoData.response.photos;
+      var photoUrl = [];
+
+      //Add two photos or the maximum returned by the query
+      for(var i=0;i<2;i++){
+        if(photoObj.count > i){
+          photoUrl.push(photoObj.items[i].prefix+"100x100"+photoObj.items[i].suffix);
+        }
+        else{
+          break;
+        }
+      }
+
+      if(photoUrl.length > 0 ){
+        content = addPhotoToContent(content, photoUrl);
+        infoWindow.setContent(content);
+      } else{
+        //If we don't have photos show the rest of the retrieved information
+        infoWindow.setContent(content);
+      }
+
+    })
   }).catch(function() {
-    console.log("Error on foursquare API fetch");
+    alert("Failed to fetch Foursquare data");
     infoWindow.setContent("<strong>"+vm.getPlaceName(marker.id)+
-                          "</strong><br/><p>No info for this place</p>");
+                          "</strong><br/><p>No additional info for this place</p>");
   });
 }
 
