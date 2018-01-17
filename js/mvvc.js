@@ -14,10 +14,10 @@ function refreshMarkers(){
     //Remove marker, but insert again if the item is on list
     vm.markers[i].setMap(null);
     var markerLocation = vm.markers[i].getPosition();
-    var places = vm.filteredPlaces();
+    var locations = vm.getFilteredLocations();
     var j;
-    for(j=0; j < places.length; j++){
-      var placeLocation = new google.maps.LatLng(places[j].location);
+    for(j=0; j < locations.length; j++){
+      var placeLocation = new google.maps.LatLng(locations[j]);
       if(placeLocation.equals(markerLocation)){
         vm.markers[i].setMap(vm.map);
         break;
@@ -47,6 +47,7 @@ function openInfoWindow(marker){
   }
 }
 
+//Format information that the infoBox will receive. Show only the fields with some information
 function formatInfoContent(name, phone, url, addr){
     var infoStr =  "<strong>"+name+"</strong><br/>";
 
@@ -86,7 +87,7 @@ function getFoursquareData(infoWindow, marker){
     if(response.ok){
       return response.json();
     } else{
-      console.log("RESPONSE NOT OK");
+      alert("Foursquare query failed");
     }
   }).then(function(data) {
     //From query results get the place name, telephone, website and first 2 tips
@@ -151,6 +152,7 @@ var Place = function(name, location, category, subcategory){
 var ViewModel = function() {
   var self = this;
 
+  //Create Model as array
   self.places = ko.observableArray([
     new Place("Dalben", {lat: -22.850176, lng: -47.054178}, "Shop", "Market"),
     new Place("Monticelli", {lat: -22.852026, lng: -47.053182}, "Restaurant", "Pizza"),
@@ -271,6 +273,16 @@ var ViewModel = function() {
       }
 
     }
+  }
+
+  //Provide copy of locations
+  self.getFilteredLocations = function(){
+    var locations = [];
+    var places = self.filteredPlaces();
+    for(var i = 0;i<places.length; i++){
+      locations.push(places[i].location);
+    }
+    return locations;
   }
 };
 
