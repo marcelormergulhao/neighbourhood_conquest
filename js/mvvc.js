@@ -26,7 +26,8 @@ function refreshMarkers(){
   }
 }
 
-function openInfoWindow(marker){
+function openInfoWindow(){
+  var marker = this;
   // Check to make sure the infowindow is not already opened on this marker.
   if (vm.infoWindow.marker != marker) {
     // Erase infowindow content to enable refresh
@@ -49,7 +50,7 @@ function openInfoWindow(marker){
 
 //Format information that the infoBox will receive. Show only the fields with some information
 function formatInfoContent(name, phone, url, addr, placeId, clientId){
-    var foursquareRef = "https://foursquare.com/v/"+placeId+"?ref="+clientId
+    var foursquareRef = "https://foursquare.com/v/"+placeId+"?ref="+clientId;
     //Link the name to the Foursquare venue
     var infoStr =  "<a href=\""+foursquareRef+"\"><strong>"+name+"</strong></a><br/>";
 
@@ -129,7 +130,7 @@ function getFoursquareData(infoWindow, marker){
         content = addPhotoToContent(content, photoUrl);
       }
       infoWindow.setContent(content);
-    })
+    });
   }).catch(function() {
     alert("Failed to fetch Foursquare data");
     infoWindow.setContent("<strong>"+vm.getPlaceName(marker.id)+
@@ -218,13 +219,11 @@ var ViewModel = function() {
           id: i
       });
 
-      marker.addListener('click', function(){
-        openInfoWindow(this);
-      });
+      marker.addListener('click', openInfoWindow);
 
       marker.setMap(self.map);
       self.markers.push(marker);
-    };
+    }
   };
 
   self.filter = ko.observable();
@@ -285,5 +284,5 @@ var ViewModel = function() {
 };
 
 //Save Viewmodel in variable to use data outside ViewModel
-var vm = new ViewModel()
+var vm = new ViewModel();
 ko.applyBindings(vm);
