@@ -250,6 +250,28 @@ var ViewModel = function() {
     self.filter("");
     refreshMarkers();
   }
+
+  //Observable to control if the menu should be visible or not
+  self.showMenu = ko.observable(true);
+
+  //Toggle menu state
+  self.hideMenu = function(){
+    var contentArea = document.getElementById("container");
+    if(self.showMenu()){
+      self.showMenu(false);
+      //Change the template areas
+      contentArea.style.gridTemplateAreas='"t t t t t t t t t t""a a a a a a a a a a"';
+    } else{
+      self.showMenu(true);
+      //For the mobile version of the app, we make the menu larger for better usability
+      if(screen.width > 500){
+        contentArea.style.gridTemplateAreas='"t t t t t t t t t t""m m a a a a a a a a"';
+      } else{
+        contentArea.style.gridTemplateAreas='"t t t t t t t t t t""m m m m m m a a a a"';
+      }
+
+    }
+  }
 };
 
 //Save Viewmodel in variable to use data outside ViewModel

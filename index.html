@@ -9,9 +9,12 @@
   <title>Neighbourhood Conquest</title>
 </head>
 <body>
-  <div class="container">
-    <header class="title">Neighbourhood Conquest</header>
-    <aside class="menu">
+  <div id="container">
+    <header class="title">
+      <i class="fa fa-bars hButton" data-bind="click: hideMenu"></i>
+      <span class="titleText">Neighbourhood Conquest</span>
+    </header>
+    <aside class="menu" data-bind="visible: showMenu">
       <form class="search-form" data-bind="submit: mapRefresh">
         <input class="place-search" type="text" data-bind="value: filter" placeholder="Filter Places"/>
         <i class="fa fa-chevron-circle-left fa-2x search-clear" data-bind="click: $root.clearFilter">
