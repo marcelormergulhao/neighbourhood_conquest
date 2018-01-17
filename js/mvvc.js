@@ -160,7 +160,6 @@ var ViewModel = function() {
     new Place("Casa do Yakisoba", {lat: -22.856151, lng: -47.044981}, "Restaurant", "Chinese"),
     new Place("Pão da Primavera", {lat: -22.858820, lng: -47.046944}, "Shop", "Bakery"),
     new Place("CPFL", {lat: -22.858250, lng: -47.045292}, "Company", "Energy"),
-    new Place("Mamas e Papas", {lat: -22.855609, lng: -47.043742}, "Restaurant", "Pizza"),
     new Place("Policamp", {lat: -22.851883, lng: -47.043622}, "Education", "College"),
     new Place("Elite", {lat: -22.850697, lng: -47.043289}, "Education", "High School"),
     new Place ("Correios", {lat: -22.849342, lng: -47.044072}, "Transportation", "Delivery"),
