@@ -9,7 +9,7 @@ be able to populate the list of places from a custom location.
 
 ## How to run it
 
-Well, the project is a simple web page, so open "index.html" it in your browser
+Well, the project is a simple web page, so open "index.html" in your browser
 and check how it feels.
 Soon I will add some backend to help maintain the new user data.
 
