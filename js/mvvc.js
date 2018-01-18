@@ -172,18 +172,18 @@ var ViewModel = function() {
 
   self.selectPlace = function(place){
     //Set new current place to highlight in UI
-    self.currentPlace(place);
-    var placeLoc = new google.maps.LatLng(place.location);
-    for(var i=0; i < self.markers.length; i++){
-      var marker=self.markers[i];
-      if(placeLoc.equals(marker.position)){
-        marker.setIcon(self.markerHighlight);
-        //Make sure the infoWindow is from this marker, otherwise close it
-        if(self.infoWindow.marker != marker){
-          self.infoWindow.close();
+    if(place != self.currentPlace()){
+      self.currentPlace(place);
+      var placeLoc = new google.maps.LatLng(place.location);
+      for(var i=0; i < self.markers.length; i++){
+        var marker=self.markers[i];
+        if(placeLoc.equals(marker.position)){
+          marker.setIcon(self.markerHighlight);
+          //Open infowindow for this location
+          google.maps.event.trigger(marker, 'click');
+        } else{
+          marker.setIcon(self.markerSimple);
         }
-      } else{
-        marker.setIcon(self.markerSimple);
       }
     }
   };
