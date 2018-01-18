@@ -250,7 +250,7 @@ var ViewModel = function() {
     if(self.markers.length > 0){
       refreshMarkers();
     }
-  })
+  });
   //Keep map refresh just to disable form submit
   self.mapRefresh = function(){
     refreshMarkers();
