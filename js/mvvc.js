@@ -270,6 +270,7 @@ var ViewModel = function() {
         contentArea.style.gridTemplateAreas='"t t t t t t t t t t""m m m m m m a a a a"';
       }
     }
+    google.maps.event.trigger(vm.map, 'resize');
   };
 
   //Provide copy of locations
