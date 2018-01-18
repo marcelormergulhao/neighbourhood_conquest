@@ -9,6 +9,10 @@ function initMap(){
   vm.createMarkers();
 }
 
+function apiMapsError(){
+  alert("Failed to load maps API");
+}
+
 function refreshMarkers(){
   for(var i=0; i< vm.markers.length; i++){
     //Remove marker, but insert again if the item is on list
