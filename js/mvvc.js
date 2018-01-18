@@ -239,12 +239,18 @@ var ViewModel = function() {
     }
   });
 
+  self.markers = [];
   //Refresh map if user updates the input field
+  self.refreshedMap = ko.computed(function(){
+    var filteredPlaces = self.filteredPlaces();
+    if(self.markers.length > 0){
+      refreshMarkers();
+    }
+  })
+  //Keep map refresh just to disable form submit
   self.mapRefresh = function(){
     refreshMarkers();
   };
-
-  self.markers = [];
 
   self.clearFilter = function(){
     self.filter("");
