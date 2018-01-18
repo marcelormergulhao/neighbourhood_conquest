@@ -16,7 +16,7 @@
     </header>
     <aside class="menu" data-bind="visible: showMenu">
       <form class="search-form" data-bind="submit: mapRefresh">
-        <input class="place-search" type="text" data-bind="value: filter" placeholder="Filter Places"/>
+        <input class="place-search" type="text" data-bind="textInput: filter" placeholder="Filter Places"/>
         <i class="fa fa-chevron-circle-left fa-2x search-clear" data-bind="click: $root.clearFilter">
         </i>
       </form>
